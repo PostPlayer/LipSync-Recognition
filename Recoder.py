@@ -5,11 +5,11 @@ CHUNK = 1024
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
-RECORD_SECONDS = 5
-WAVE_OUTPUT_FILENAME = "/Users/emptyhead/Dropbox/내 Mac (gimhyeongjun-ui-MacBookPro.local)/Desktop/GraduateProject/wavfile/test.wav"
+RECORD_SECONDS = 1
+WAVE_OUTPUT_FILENAME = "output.wav"
+
 
 p = pyaudio.PyAudio()
-
 stream = p.open(format=FORMAT,
                 channels=CHANNELS,
                 rate=RATE,
