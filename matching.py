@@ -3,7 +3,9 @@ import wave
 import numpy as np
 from pynput import keyboard
 from threading import Thread
-
+import cv2
+from matplotlib import pyplot as plt
+from IPython import display 
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
@@ -12,6 +14,9 @@ RATE = 44100
 RECORD_SECONDS = 1
 WAVE_OUTPUT_FILENAME = "output.wav"
 NOISE_MININUM_VALUE = 250
+
+#def show():
+    
 
 def on_press(key):
     if key == keyboard.Key.esc:
@@ -53,9 +58,16 @@ while True:
         # print(int(np.average(np.abs(data))))
         frames.extend(data)
         # print("length : ", len(frames))
-        if len(frames) > 10:
-            print(frames)
-            frames = []
+        if (1000>int(np.average(np.abs(data))) > 700):
+            image = cv2.imread("state_lough.png", cv2.IMREAD_UNCHANGED)
+            cv2.imshow("ough", image)
+
+            cv2.waitKey(0)
+            cv2.destroyAllWindows() 
             
-            
-    
+        if (500>int(np.average(np.abs(data))) > 250):
+            image = cv2.imread("state_OH.png", cv2.IMREAD_UNCHANGED)
+            cv2.imshow("smile", image)
+
+            cv2.waitKey(0)
+            cv2.destroyAllWindows() 
