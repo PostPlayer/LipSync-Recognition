@@ -46,8 +46,6 @@ print("Start to record the audio.")
 
 frames = []
 
-# for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-
 Thread(target=keyint, daemon=False)
 while True:
     data = np.frombuffer(stream.read(CHUNK), dtype=np.int16)
@@ -58,3 +56,6 @@ while True:
         if len(frames) > 10:
             print(frames)
             frames = []
+            
+            
+    
