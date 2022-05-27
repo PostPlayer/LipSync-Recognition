@@ -10,8 +10,8 @@ from scipy.io.wavfile import write
 
 
 ############ Global variables ###################
-filename = 'output.wav' #Test file
-chunk = 512 #frame size
+filename = 'test.wav' #Test file
+chunk = 1024 #frame size
 #Conversion from np to pyAudio types
 np_to_pa_format = {
     np.dtype('float32') : pyaudio.paFloat32,

@@ -59,15 +59,15 @@ while True:
         frames.extend(data)
         # print("length : ", len(frames))
         if (1000>int(np.average(np.abs(data))) > 700):
-            image = cv2.imread("state_lough.png", cv2.IMREAD_UNCHANGED)
+            image = cv2.imread("state/state_lough.png", cv2.IMREAD_UNCHANGED)
             cv2.imshow("ough", image)
 
             cv2.waitKey(0)
             cv2.destroyAllWindows() 
             
-        if (500>int(np.average(np.abs(data))) > 250):
-            image = cv2.imread("state_OH.png", cv2.IMREAD_UNCHANGED)
-            cv2.imshow("smile", image)
+        if (int(np.average(np.abs(data))) > 250):
+            image = cv2.imread("state/state_OH.png", cv2.IMREAD_UNCHANGED)
+            cv2.imshow("OH", image)
 
             cv2.waitKey(0)
             cv2.destroyAllWindows() 

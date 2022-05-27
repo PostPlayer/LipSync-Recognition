@@ -45,17 +45,21 @@ stream = p.open(format=FORMAT,
 print("Start to record the audio.")
 
 frames = []
+count = 5
+i =0
 
 Thread(target=keyint, daemon=False)
 while True:
     data = np.frombuffer(stream.read(CHUNK), dtype=np.int16)
-    if(int(np.average(np.abs(data))) > NOISE_MININUM_VALUE):
+    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+        if(int(np.average(np.abs(data))) > NOISE_MININUM_VALUE):
         # print(int(np.average(np.abs(data))))
-        frames.extend(data)
+            frames.extend(data)
         # print("length : ", len(frames))
-        if len(frames) > 10:
-            print(frames)
-            frames = []
+            if len(frames) > 10:
+                print(frames)
+                frames = []
+
             
             
     

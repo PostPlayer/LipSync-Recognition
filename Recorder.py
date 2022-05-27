@@ -5,8 +5,8 @@ CHUNK = 1024
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
-RECORD_SECONDS = 5
-WAVE_OUTPUT_FILENAME = "/Users/emptyhead/Dropbox/내 Mac (gimhyeongjun-ui-MacBookPro.local)/Desktop/GraduateProject/wavfile/test.wav"
+RECORD_SECONDS = 0.2
+WAVE_OUTPUT_FILENAME = "test.wav"
 
 p = pyaudio.PyAudio()
 
@@ -19,13 +19,18 @@ stream = p.open(format=FORMAT,
 print("Start to record the audio.")
 
 frames = []
+count = 10
+j = 0
 
-for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-    data = stream.read(CHUNK)
-    frames.append(data)
+while j < count:
+    j += 1
+    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+        data = stream.read(CHUNK)
+        frames.append(data)
+        
     
 print("Recording is finished.")
-
+#print(frames)
 stream.stop_stream()
 stream.close()
 p.terminate()
