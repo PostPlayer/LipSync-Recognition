@@ -1,4 +1,5 @@
-from turtle import delay
+from pickle import FALSE, TRUE
+from turtle import Screen, delay
 from xml.dom.minidom import CharacterData
 import pygame
 import pyaudio
@@ -23,6 +24,7 @@ RATE = 44100
 RECORD_SECONDS = 1
 WAVE_OUTPUT_FILENAME = "test.wav"
 NOISE_MININUM_VALUE = 250
+FONT_NAME = 'arial'
 # pygame 초기화
 
 pygame.init()
@@ -36,7 +38,7 @@ def keyint():
 
 
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("pygame Sprite")
+pygame.display.set_caption("음성인식 테스트")
 # FPS를 위한 Clock 생성
 clock = pygame.time.Clock()
 
@@ -44,44 +46,67 @@ FPS = 120
 
 frames = []
 
-BACKGROUND_COLOR = pygame.Color('White')
 
- 
+BACKGROUND_COLOR = pygame.Color('White')
 
 class AnimatedSprite(pygame.sprite.Sprite):
 
- 
 
-    def __init__(self, position):
+    def __init__(self, position,count):
 
         super(AnimatedSprite, self).__init__()
-
- 
-
         # 이미지를 Rect안에 넣기 위해 Rect의 크기 지정
         # 이미지의 크기와 같게 하거나, 크기를 다르게 한다면 pygame.transform.scale을 사용하여 rect 안에
         # 이미지를 맞추도록 한다.
         size = (600,400)
-      #  pygame.transform.scale(pygame.Surface,size,DestSurface = None)
+        #pygame.transform.scale(pygame.Surface,size,DestSurface = None)
  
 
         # 여러장의 이미지를 리스트로 저장한다. 이미지 경로는 자신들의 경로를 사용한다.
-        images = []
-        images.append(pygame.image.load('state/state_nomal.png'))
+        images1 = []
+        images1.append(pygame.image.load('state/bunnyFace_Mute.png'))
+        images1.append(pygame.image.load('state/bunnyFace_A.png'))
+        images1.append(pygame.image.load('state/bunnyFace_E.png'))
+        images1.append(pygame.image.load('state/bunnyFace_I.png'))
+        images1.append(pygame.image.load('state/bunnyFace_O.png'))
+        images1.append(pygame.image.load('state/bunnyFace_U.png'))
+        images2 = []
+        images2.append(pygame.image.load('state/catFace_Mute.png'))
+        images2.append(pygame.image.load('state/catFace_A.png'))
+        images2.append(pygame.image.load('state/catFace_E.png'))
+        images2.append(pygame.image.load('state/catFace_I.png'))
+        images2.append(pygame.image.load('state/catFace_O.png'))
+        images2.append(pygame.image.load('state/catFace_U.png'))
+        images3 = []
+        images3.append(pygame.image.load('state/cowFace_Mute.png'))
+        images3.append(pygame.image.load('state/cowFace_A.png'))
+        images3.append(pygame.image.load('state/cowFace_E.png'))
+        images3.append(pygame.image.load('state/cowFace_I.png'))
+        images3.append(pygame.image.load('state/cowFace_O.png'))
+        images3.append(pygame.image.load('state/cowFace_U.png'))
+        images4 = []
+        images4.append(pygame.image.load('state/mouseFace_Mute.png'))
+        images4.append(pygame.image.load('state/mouseFace_A.png'))
+        images4.append(pygame.image.load('state/mouseFace_E.png'))
+        images4.append(pygame.image.load('state/mouseFace_I.png'))
+        images4.append(pygame.image.load('state/mouseFace_O.png'))
+        images4.append(pygame.image.load('state/mouseFace_U.png'))
         
         image_nomal = []
-        image_nomal.append(pygame.image.load('state/state_nomal.png'))
-        image_nomal.append(pygame.image.load('state/state_surprise.png'))
-        image_nomal.append(pygame.image.load('state/state_gloomy.png'))
-        image_nomal.append(pygame.image.load('state/state_lough.png'))
-        image_nomal.append(pygame.image.load('state/state_OH.png'))
-        image_nomal.append(pygame.image.load('state/state_happy.png'))
-
+        
+        if count == 1:
+            image_nomal = images1
+        if count == 2:    
+            image_nomal = images2   
+        if count == 3:   
+            image_nomal = images3
+        if count == 4:    
+            image_nomal = images4     
         # rect 만들기
         self.rect = pygame.Rect(position, size)
 
         # Rect 크기와 Image 크기 맞추기. pygame.transform.scale
-        self.images = [pygame.transform.scale(image, size) for image in images]
+        #self.images = [pygame.transform.scale(image, size) for image in images]
         self.image_nomal = [pygame.transform.scale(image, size) for image in image_nomal]
  
 
@@ -94,10 +119,8 @@ class AnimatedSprite(pygame.sprite.Sprite):
 
         # mt와 결합하여 animation_time을 계산할 시간 초기화
         self.current_time = 0
-
- 
-
- 
+        self.font_name = pygame.font.match_font(FONT_NAME)
+        
 
     def update(self, mt, noise):
         # update를 통해 캐릭터의 이미지가 계속 반복해서 나타나도록 한다.
@@ -111,17 +134,17 @@ class AnimatedSprite(pygame.sprite.Sprite):
             self.current_time = 0
            
             if(noise=="ㅗ" or noise == "ㅛ"):
-                self.index = 1
-            elif(noise == "ㅏ"or noise == "ㅑ"):
-                self.index = 2
-            elif(noise == "ㅔ"or noise == "ㅐ"):
-                self.index = 3
-            elif(noise == "ㅣ"or noise == "ㅡ"):
                 self.index = 4
+            elif(noise == "ㅏ"or noise == "ㅑ"):
+                self.index = 1
+            elif(noise == "ㅔ"or noise == "ㅐ"):
+                self.index = 2
+            elif(noise == "ㅣ"or noise == "ㅡ"):
+                self.index = 3
             elif(noise == "ㅜ"or noise == "ㅠ"):
                 self.index = 5
             elif(noise == "ㅓ"or noise == "ㅕ"):
-                self.index = 5
+                self.index = 4
             else:
                self.index = 0
             
@@ -129,50 +152,118 @@ class AnimatedSprite(pygame.sprite.Sprite):
             #   self.index = 1
 
             self.image = self.image_nomal[self.index]
-
  
-def Rcoding():
-    print("Start to record the audio.")
-    frames = []
-    p = pyaudio.PyAudio() 
-    stream = p.open(format=FORMAT,
-                channels=CHANNELS,
-                rate=RATE,
-                input=True,
-                frames_per_buffer=CHUNK)
-    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-        data = stream.read(CHUNK)
-        frames.append(data)
-    stream.stop_stream()
-    stream.close()
-    p.terminate()
-
-    wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
-    wf.setnchannels(CHANNELS)
-    wf.setsampwidth(p.get_sample_size(FORMAT))
-    wf.setframerate(RATE)
-    wf.writeframes(b''.join(frames))
-    wf.close()
  
+    def select(self):
+        pygame.init()
+        SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        set_count = 0
+        player = []
+        player.append(pygame.image.load("state/bunnyFace_Mute.png"))
+        player.append(pygame.image.load("state/catFace_Mute.png"))
+        player.append(pygame.image.load("state/cowFace_Mute.png"))
+        player.append(pygame.image.load("state/mouseFace_Mute.png"))
+        player[0] = pygame.transform.scale(player[0], (100, 100))
+        player[1] = pygame.transform.scale(player[1],(100,100))
+        player[2] = pygame.transform.scale(player[2],(100,100))
+        player[3] = pygame.transform.scale(player[3],(100,100))
+        
+        player_Rect = player[0].get_rect()
+        cat_Rect = player[1].get_rect()
+        cow_Rect = player[2].get_rect()
+        mouse_Rect = player[3].get_rect()
+        
+        player_Rect.centerx = 200
+        player_Rect.centery = 200
+        cat_Rect.centerx = 400
+        cat_Rect.centery = 200
+        
+        cow_Rect.centerx = 600
+        cow_Rect.centery = 200
+        mouse_Rect.centerx = 800
+        mouse_Rect.centery = 200
+        
+        MOVE = False
+        
+        
+        
+        playing = TRUE
+        while playing:
+            
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                    
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pygame.mouse.get_rel()         
+                    mouse_pos = pygame.mouse.get_pos()
+
+                    if mouse_pos[0] > player_Rect.left and mouse_pos[0] < player_Rect.right and mouse_pos[1] > player_Rect.top and mouse_pos[1] < player_Rect.bottom:
+                        MOVE = True
+                        set_count = 1
+                        pygame.mouse.set_cursor(*pygame.cursors.broken_x)
+                        
+                    if mouse_pos[0] > cat_Rect.left and mouse_pos[0] < cat_Rect.right and mouse_pos[1] > cat_Rect.top and mouse_pos[1] < cat_Rect.bottom:
+                        MOVE = True
+                        set_count = 2
+                        pygame.mouse.set_cursor(*pygame.cursors.broken_x)    
+                        
+                    if mouse_pos[0] > cow_Rect.left and mouse_pos[0] < cow_Rect.right and mouse_pos[1] > cow_Rect.top and mouse_pos[1] < cow_Rect.bottom:
+                        MOVE = True
+                        set_count = 3
+                        pygame.mouse.set_cursor(*pygame.cursors.broken_x) 
+                    
+                    if mouse_pos[0] > mouse_Rect.left and mouse_pos[0] < mouse_Rect.right and mouse_pos[1] > mouse_Rect.top and mouse_pos[1] < mouse_Rect.bottom:
+                        MOVE = True
+                        set_count = 4
+                        pygame.mouse.set_cursor(*pygame.cursors.broken_x)       
+                          
+                if event.type == pygame.MOUSEBUTTONUP:
+                    MOVE = False
+                    pygame.mouse.set_cursor(*pygame.cursors.arrow)
+                    
+                if MOVE:
+                    playing = False
+                    return set_count
+                
+                SCREEN.fill((255,255,255))
+                SCREEN.blit(player[0], player_Rect) 
+                SCREEN.blit(player[1],cat_Rect)   
+                SCREEN.blit(player[2],cow_Rect)
+                SCREEN.blit(player[3],mouse_Rect)
+                self.draw_text("Charater Seletion Page", 22,(0,0,0), 500, 400)
+                pygame.display.flip()
+                clock.tick(60)
+
+    def draw_text(self, text, size, color, x, y):
+        font = pygame.font.Font(self.font_name, size)
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (x, y)
+        SCREEN.blit(text_surface, text_rect)
+    
 
 def main():
     
     #Rcoding()
-    
+    count = 1
     # player 생성
-    player = AnimatedSprite(position=(100, 8))
+    player = AnimatedSprite(position=(100, 8),count=(count))
     # 생성된 player를 그룹에 넣기
     all_sprites = pygame.sprite.Group(player)  
-
-   #
+    
+    count = player.select()
     
     Thread(target=keyint, daemon=False)
+    
+    player = AnimatedSprite(position=(100, 8),count=(count))
+    # 생성된 player를 그룹에 넣기
+    all_sprites = pygame.sprite.Group(player)  
+    
     running = True
     while running:
-       
 # 스크린 객체 저장
-        #Rcoding()
-        
         r = sr.Recognizer()
         mt = clock.tick(60) / 1000
         # 각 loop를 도는 시간. clock.tick()은 밀리초를 반환하므로
