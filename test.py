@@ -13,6 +13,9 @@ from IPython import display
 import speech_recognition as sr
 import time
 from jamo import h2j, j2hcj
+from trance import KoreanToRoman,arg_parse
+import re
+from Player import Playing
 # 스크린 전체 크기 지정
 
 SCREEN_WIDTH = 1020
@@ -121,14 +124,16 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.current_time = 0
         self.font_name = pygame.font.match_font(FONT_NAME)
         
+                
+        
 
     def update(self, mt, noise):
         # update를 통해 캐릭터의 이미지가 계속 반복해서 나타나도록 한다.
         
         # loop 시간 더하기
         self.current_time += mt
-
-
+        
+        
         # loop time 경과가 animation_time을 넘어서면 새로운 이미지 출력 
         if self.current_time >= self.animation_time:
             self.current_time = 0
@@ -137,13 +142,13 @@ class AnimatedSprite(pygame.sprite.Sprite):
                 self.index = 4
             elif(noise == "ㅏ"or noise == "ㅑ"):
                 self.index = 1
-            elif(noise == "ㅔ"or noise == "ㅐ"):
+            elif(noise == "ㅔ"or noise == "ㅐ"or noise == "ㅒ"):
                 self.index = 2
             elif(noise == "ㅣ"or noise == "ㅡ"):
                 self.index = 3
             elif(noise == "ㅜ"or noise == "ㅠ"):
                 self.index = 5
-            elif(noise == "ㅓ"or noise == "ㅕ"):
+            elif(noise == "ㅓ"or noise == "ㅕ"or noise == "ㅖ"):
                 self.index = 4
             else:
                self.index = 0
@@ -260,7 +265,7 @@ def main():
     player = AnimatedSprite(position=(100, 8),count=(count))
     # 생성된 player를 그룹에 넣기
     all_sprites = pygame.sprite.Group(player)  
-    
+    #Playing()
     running = True
     while running:
 # 스크린 객체 저장
@@ -274,14 +279,21 @@ def main():
         # int(np.average(np.abs(data)))
         with sr.AudioFile('test.wav') as source:
             audio = r.record(source, duration=120)
-             
-        noise = r.recognize_google(audio_data=audio, language='ko-KR')
         
-        jamo_str = j2hcj(h2j(noise))
+        noise = r.recognize_google(audio_data=audio, language='ko-KR')
+        hello = KoreanToRoman(unravel = False)
+        output = []
+        p = re.compile('[a-zA-Z]')
+        output.clear()
+        words = noise.split(' ')
+        for word in words:
+            output.append(hello.transcribe(word,separator= False,capital = False,transliterate = False))
+       
+        jamo_str = ''.join(output)
+        
         print(jamo_str)
         for  i in jamo_str:
             time.sleep(0.1)
-            print(i)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -292,9 +304,9 @@ def main():
             SCREEN.fill(BACKGROUND_COLOR)
                 # 모든 sprite 화면에 그려주기
             all_sprites.draw(SCREEN)
-            pygame.display.update() 
-            
-        
+            pygame.display.update()
+    
+        #jamo_str = j2hcj(h2j(noise))
         # all_sprites 그룹안에 든 모든 Sprite update
  
 
