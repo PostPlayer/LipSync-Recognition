@@ -1,22 +1,25 @@
 import socket
+import select
+import sys
 
-HOST = '127.0.0.1'
-PORT = 9999
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(('127.0.0.1', 8000))
 
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect((HOST, PORT))
+name = None
 
-while(1):
-    msg = input("Send Message : ")
-    data = msg.encode();
-    length = len(data);
-    client_socket.sendall(length.to_bytes(4, byteorder="little"));
-    client_socket.sendall(data);
+while True:
+    read, write, fail = select.select((s, sys.stdin), (), ())
     
-    data = client_socket.recv(4);
-    length = int.from_bytes(data, "little");
-    data = client_socket.recv(length);
-    msg = data.decode();
-    print('Received from : ', msg);
-    
-client_socket.close();
+    for desc in read:
+        if desc == s:
+            data = s.recv(4096)
+            print(data.decode())
+            
+            if name is None:
+                name = data.decode()
+                s.send(f'{name} is connected!'.encode())
+            
+            else:
+                msg = desc.readline()
+                msg = msg.replace('\n', '')
+                s.send(f'{name} {msg}'.encode())
