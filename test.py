@@ -15,7 +15,7 @@ import time
 from jamo import h2j, j2hcj
 from trance import KoreanToRoman,arg_parse
 import re
-from Player import Playing
+from player import Playing
 # 스크린 전체 크기 지정
 
 SCREEN_WIDTH = 1020
@@ -55,13 +55,14 @@ BACKGROUND_COLOR = pygame.Color('White')
 class AnimatedSprite(pygame.sprite.Sprite):
 
 
-    def __init__(self, position,count):
+    def __init__(self,count):
 
         super(AnimatedSprite, self).__init__()
         # 이미지를 Rect안에 넣기 위해 Rect의 크기 지정
         # 이미지의 크기와 같게 하거나, 크기를 다르게 한다면 pygame.transform.scale을 사용하여 rect 안에
         # 이미지를 맞추도록 한다.
-        size = (600,400)
+        size = (100,100) 
+        #캐릭터 사이즈
         #pygame.transform.scale(pygame.Surface,size,DestSurface = None)
  
 
@@ -106,17 +107,29 @@ class AnimatedSprite(pygame.sprite.Sprite):
         if count == 4:    
             image_nomal = images4     
         # rect 만들기
-        self.rect = pygame.Rect(position, size)
-
+        self.exit_rect = pygame.Rect((100,100),size)
+        self.rab_rect = pygame.Rect((200,200), size)
+        self.cat_rect = pygame.Rect((400,200),size)
+        self.cow_rect = pygame.Rect((600,200),size)
+        self.rat_rect = pygame.Rect((800,200),size)
         # Rect 크기와 Image 크기 맞추기. pygame.transform.scale
-        #self.images = [pygame.transform.scale(image, size) for image in images]
         self.image_nomal = [pygame.transform.scale(image, size) for image in image_nomal]
- 
+        self.images1 = [pygame.transform.scale(image1, size) for image1 in images1]
+        self.images2 =[pygame.transform.scale(image2,size) for image2 in images2]
+        self.images3 =[pygame.transform.scale(image3,size) for image3 in images3]
+        self.images4 =[pygame.transform.scale(image4,size) for image4 in images4]
 
         # 캐릭터의 첫번째 이미지
-        self.index = 0
-        self.image = image_nomal[self.index]
-
+        self.index1 = 0
+        self.index2 = 0
+        self.index3 = 0
+        self.index4 = 0
+        #배열지정
+        self.image1 = images1[self.index1]
+        self.image2 = images2[self.index2]
+        self.image3 = images3[self.index3]
+        self.image4 = images4[self.index4]
+        
         # 1초에 보여줄 1장의 이미지 시간을 계산, 소수점 3자리까지 반올림
         self.animation_time = round(100 / len(self.image_nomal * 100), 2)
 
@@ -126,8 +139,17 @@ class AnimatedSprite(pygame.sprite.Sprite):
         
                 
         
-
-    def update(self, mt, noise):
+    def draw(self):
+        SCREEN.fill((255,255,255))
+        SCREEN.blit(self.image1, self.rab_rect) 
+        SCREEN.blit(self.image2,self.cat_rect)
+        SCREEN.blit(self.image3,self.cow_rect)
+        SCREEN.blit(self.image4,self.rat_rect)
+        SCREEN.blit(self.image1, self.exit_rect)
+        pygame.display.flip()                           
+                
+                      
+    def update(self, mt, noise,count):
         # update를 통해 캐릭터의 이미지가 계속 반복해서 나타나도록 한다.
         
         # loop 시간 더하기
@@ -139,24 +161,81 @@ class AnimatedSprite(pygame.sprite.Sprite):
             self.current_time = 0
            
             if(noise=="ㅗ" or noise == "ㅛ"):
-                self.index = 4
+                if(count == 1):
+                    self.index1 = 4
+                if(count == 2):
+                    self.index2 = 4
+                if(count == 3):
+                    self.index3 = 4
+                if(count == 4):
+                    self.index4 = 4
+                    
             elif(noise == "ㅏ"or noise == "ㅑ"):
-                self.index = 1
+                if(count == 1):
+                    self.index1 = 1
+                if(count == 2):
+                    self.index2 = 1
+                if(count == 3):
+                    self.index3 = 1
+                if(count == 4):
+                    self.index4 = 1
+
             elif(noise == "ㅔ"or noise == "ㅐ"or noise == "ㅒ"):
-                self.index = 2
+                if(count == 1):
+                    self.index1 = 2
+                if(count == 2):
+                    self.index2 = 2
+                if(count == 3):
+                    self.index3 = 2
+                if(count == 4):
+                    self.index4 = 2
+                    
             elif(noise == "ㅣ"or noise == "ㅡ"):
-                self.index = 3
+                if(count == 1):
+                    self.index1 = 3
+                if(count == 2):
+                    self.index2 = 3
+                if(count == 3):
+                    self.index3 = 3
+                if(count == 4):
+                    self.index4 = 3
+
             elif(noise == "ㅜ"or noise == "ㅠ"):
-                self.index = 5
+                if(count == 1):
+                    self.index1 = 5
+                if(count == 2):
+                    self.index2 = 5
+                if(count == 3):
+                    self.index3 = 5
+                if(count == 4):
+                    self.index4 = 5
+
             elif(noise == "ㅓ"or noise == "ㅕ"or noise == "ㅖ"):
-                self.index = 4
+                if(count == 1):
+                    self.index1 = 4
+                if(count == 2):
+                    self.index2 = 4
+                if(count == 3):
+                    self.index3 = 4
+                if(count == 4):
+                    self.index4 = 4
+
             else:
-               self.index = 0
+                if(count == 1):
+                    self.index1 = 0
+                if(count == 2):
+                    self.index2 = 0
+                if(count == 3):
+                    self.index3 = 0
+                if(count == 4):
+                    self.index4 = 0
             
             #if self.index >= len(self.image_nomal):
             #   self.index = 1
-
-            self.image = self.image_nomal[self.index]
+            self.image1 = self.images1[self.index1]
+            self.image2 = self.images2[self.index2]
+            self.image3 = self.images3[self.index3]
+            self.image4 = self.images4[self.index4]
  
  
     def select(self):
@@ -189,8 +268,6 @@ class AnimatedSprite(pygame.sprite.Sprite):
         mouse_Rect.centery = 200
         
         MOVE = False
-        
-        
         
         playing = TRUE
         while playing:
@@ -241,12 +318,17 @@ class AnimatedSprite(pygame.sprite.Sprite):
                 pygame.display.flip()
                 clock.tick(60)
 
-    def draw_text(self, text, size, color, x, y):
+    def draw_text(self, text, size, color, x, y):\
+        
         font = pygame.font.Font(self.font_name, size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
         SCREEN.blit(text_surface, text_rect)
+        
+        
+    def check_self(self):
+        self.exit_rect
     
 
 def main():
@@ -254,18 +336,16 @@ def main():
     #Rcoding()
     count = 1
     # player 생성
-    player = AnimatedSprite(position=(100, 8),count=(count))
+    player = AnimatedSprite(count=(count))
     # 생성된 player를 그룹에 넣기
-    all_sprites = pygame.sprite.Group(player)  
-    
+    #all_sprites = pygame.sprite.Group(player)  
     count = player.select()
     
     Thread(target=keyint, daemon=False)
     
-    player = AnimatedSprite(position=(100, 8),count=(count))
-    # 생성된 player를 그룹에 넣기
-    all_sprites = pygame.sprite.Group(player)  
-    #Playing()
+    player = AnimatedSprite(count=(count))
+    setcount = 0
+    
     running = True
     while running:
 # 스크린 객체 저장
@@ -298,16 +378,28 @@ def main():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
+                    
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pygame.mouse.get_rel()         
+                    mouse_pos = pygame.mouse.get_pos()
+                
+                    if mouse_pos[0] > pygame.Rect((100,100),(100,100)).left and mouse_pos[0] < pygame.Rect((100,100),(100,100)).right and mouse_pos[1] > pygame.Rect((100,100),(100,100)).top and mouse_pos[1] < pygame.Rect((100,100),(100,100)).bottom:
+                        setcount = 1
+                        pygame.mouse.set_cursor(*pygame.cursors.broken_x)   
+                        
+                if event.type == pygame.MOUSEBUTTONUP:
+                    setcount = 0
+                    pygame.mouse.set_cursor(*pygame.cursors.arrow)
+ 
+                if setcount == 1:
+                    running = False    
+                    
+                    
+            player.update(mt,i,count)
+            setcount = player.draw()
             
-            all_sprites.update(mt,i)
-                # 배경색
-            SCREEN.fill(BACKGROUND_COLOR)
-                # 모든 sprite 화면에 그려주기
-            all_sprites.draw(SCREEN)
-            pygame.display.update()
-    
-        #jamo_str = j2hcj(h2j(noise))
-        # all_sprites 그룹안에 든 모든 Sprite update
+            
+        
  
 
 if __name__ == '__main__':

@@ -1,11 +1,13 @@
 import socket
 import select
 import sys
+from test import main
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect(('127.0.0.1', 8000))
 
 name = None
+sentence = None
 
 while True:
     read, write, fail = select.select((s, sys.stdin), (), ())
@@ -14,6 +16,7 @@ while True:
         if desc == s:
             data = s.recv(4096)
             print(data.decode())
+            sentence = data.decode()
             
             if name is None:
                 name = data.decode()
@@ -23,3 +26,5 @@ while True:
                 msg = desc.readline()
                 msg = msg.replace('\n', '')
                 s.send(f'{name} {msg}'.encode())
+                
+            test = main(sentence)
