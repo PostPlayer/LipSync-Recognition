@@ -30,8 +30,8 @@ def now_time():
 
 def send_func():
     while True:
-        # send_data=input('나 : ')
-        send_data = input(f'{color}\033[36m Me : ')
+        send_data=input('나 : ')
+        # send_data = input(f'{color}\033[36m Me''\033[0m : ')
         client_sock.send(send_data.encode('utf-8'))
         if send_data=='!quit':
             print('연결을 종료하였습니다.')
@@ -70,12 +70,14 @@ except:
 else:
     print('[SYSTEM] 서버와 연결되었습니다.')
 
+
 while True:
     name = input('사용하실 닉네임을 입력하세요 :')     
     if ' ' in name:
         print('공백은 입력이 불가능합니다.')
         continue
-    client_sock.send(name.encode())
+    color = COLORS[len(name) % len(COLORS)]
+    client_sock.send(f'{color}{name}\033[0m'.encode())
     is_possible_name=client_sock.recv(1024).decode()
     
     if is_possible_name=='yes':
@@ -91,7 +93,7 @@ while True:
         client_sock.close()
         os._exit(1)
 
-color = COLORS[len(name) % len(COLORS)]
+
 sender=Thread(target=send_func, args=())
 receiver=Thread(target=recv_func, args=())
 sender.start()
