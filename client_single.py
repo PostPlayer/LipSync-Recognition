@@ -1,7 +1,7 @@
 import socket
 
-HOST = '127.0.0.1'
-# HOST = '211.104.118.60'
+# HOST = '127.0.0.1'
+HOST = '211.104.118.60'
 PORT = 10901
 
 def socket_response(msg):
