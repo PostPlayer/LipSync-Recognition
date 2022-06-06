@@ -98,6 +98,10 @@ class AnimatedSprite(pygame.sprite.Sprite):
         images4.append(pygame.image.load('state/mouseFace_U.png'))
         images5 = []
         images5.append(pygame.image.load('state/logout.png'))
+        speech = []
+        speech.append(pygame.image.load('state/text.png'))
+        text = []
+        text.append(pygame.image.load('state/headphones.png'))
         image_nomal = []
         
         if count == 1:
@@ -114,6 +118,8 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.cat_rect = pygame.Rect((400,200),size)
         self.cow_rect = pygame.Rect((600,200),size)
         self.rat_rect = pygame.Rect((800,200),size)
+        self.speech_rect = pygame.Rect((200,100),size)
+        self.text_rect = pygame.Rect((300,100),size)
         # Rect 크기와 Image 크기 맞추기. pygame.transform.scale
         self.image_nomal = [pygame.transform.scale(image, size) for image in image_nomal]
         self.images1 = [pygame.transform.scale(image1, size) for image1 in images1]
@@ -121,6 +127,8 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.images3 =[pygame.transform.scale(image3,size) for image3 in images3]
         self.images4 =[pygame.transform.scale(image4,size) for image4 in images4]
         self.images5 = [pygame.transform.scale(image5,size) for image5 in images5]
+        self.speech = [pygame.transform.scale(speech1,size) for speech1 in speech]
+        self.text =[pygame.transform.scale(text1,size) for text1 in text]
         # 캐릭터의 첫번째 이미지
         self.index1 = 0
         self.index2 = 0
@@ -132,6 +140,8 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.image3 = images3[self.index3]
         self.image4 = images4[self.index4]
         self.image5 = images5[0]
+        self.speech_set = speech[0]
+        self.text_set = text[0]
         
         # 1초에 보여줄 1장의 이미지 시간을 계산, 소수점 3자리까지 반올림
         self.animation_time = round(100 / len(self.image_nomal * 100), 2)
@@ -149,6 +159,8 @@ class AnimatedSprite(pygame.sprite.Sprite):
         SCREEN.blit(self.image3,self.cow_rect)
         SCREEN.blit(self.image4,self.rat_rect)
         SCREEN.blit(self.image5, self.exit_rect)
+        SCREEN.blit(self.speech_set,self.speech_rect)
+        SCREEN.blit(self.text_set,self.text_rect)
         pygame.display.flip()                           
                 
                       
@@ -250,15 +262,18 @@ class AnimatedSprite(pygame.sprite.Sprite):
         player.append(pygame.image.load("state/catFace_Mute.png"))
         player.append(pygame.image.load("state/cowFace_Mute.png"))
         player.append(pygame.image.load("state/mouseFace_Mute.png"))
+        player.append(pygame.image.load("state/logout.png"))
         player[0] = pygame.transform.scale(player[0], (100, 100))
         player[1] = pygame.transform.scale(player[1],(100,100))
         player[2] = pygame.transform.scale(player[2],(100,100))
         player[3] = pygame.transform.scale(player[3],(100,100))
+        player[4] = pygame.transform.scale(player[4],(50,50))
         
         player_Rect = player[0].get_rect()
         cat_Rect = player[1].get_rect()
         cow_Rect = player[2].get_rect()
         mouse_Rect = player[3].get_rect()
+        end_Rect = player[4].get_rect()
         
         player_Rect.centerx = 200
         player_Rect.centery = 200
@@ -269,6 +284,9 @@ class AnimatedSprite(pygame.sprite.Sprite):
         cow_Rect.centery = 200
         mouse_Rect.centerx = 800
         mouse_Rect.centery = 200
+        
+        end_Rect.centerx = 100
+        end_Rect.centery = 100
         
         MOVE = False
         
@@ -302,8 +320,13 @@ class AnimatedSprite(pygame.sprite.Sprite):
                     if mouse_pos[0] > mouse_Rect.left and mouse_pos[0] < mouse_Rect.right and mouse_pos[1] > mouse_Rect.top and mouse_pos[1] < mouse_Rect.bottom:
                         MOVE = True
                         set_count = 4
-                        pygame.mouse.set_cursor(*pygame.cursors.broken_x)       
-                          
+                        pygame.mouse.set_cursor(*pygame.cursors.broken_x)
+                               
+                    if mouse_pos[0] >end_Rect.left and mouse_pos[0] < end_Rect.right and mouse_pos[1] > end_Rect.top and mouse_pos[1] < end_Rect.bottom:
+                        MOVE = True
+                        set_count = 5
+                        pygame.mouse.set_cursor(*pygame.cursors.broken_x)
+                              
                 if event.type == pygame.MOUSEBUTTONUP:
                     MOVE = False
                     pygame.mouse.set_cursor(*pygame.cursors.arrow)
@@ -312,11 +335,13 @@ class AnimatedSprite(pygame.sprite.Sprite):
                     playing = False
                     return set_count
                 
+                
                 SCREEN.fill((255,255,255))
                 SCREEN.blit(player[0], player_Rect) 
                 SCREEN.blit(player[1],cat_Rect)   
                 SCREEN.blit(player[2],cow_Rect)
                 SCREEN.blit(player[3],mouse_Rect)
+                SCREEN.blit(player[4],end_Rect)
                 self.draw_text("Charater Seletion Page", 22,(0,0,0), 500, 400)
                 pygame.display.flip()
                 clock.tick(60)
@@ -332,76 +357,114 @@ class AnimatedSprite(pygame.sprite.Sprite):
     
 
 def main():
-    pygame.init()
-    SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("음성인식 테스트")
-    # FPS를 위한 Clock 생성
-    clock = pygame.time.Clock()
-    #Rcoding()
-    count = 1
-    # player 생성
-    player = AnimatedSprite(count=(count))
-    # 생성된 player를 그룹에 넣기
-    #all_sprites = pygame.sprite.Group(player)  
-    count = player.select()
+
+    speech_count = 1
+    text_count = 0
     
-    Thread(target=keyint, daemon=False)
+    testing = True
+    while testing:
+        pygame.init()
+        SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("음성인식 테스트")
+        # FPS를 위한 Clock 생성
+        clock = pygame.time.Clock()
+        #Rcoding()
+        count = 1
+        # player 생성
+        player = AnimatedSprite(count=(count))
+        # 생성된 player를 그룹에 넣기
+        #all_sprites = pygame.sprite.Group(player)  
+        count = player.select()
     
-    player = AnimatedSprite(count=(count))
-    setcount = 0
-    sentence = input()
-    socket_response(sentence)
-    running = True
-    while running:
-# 스크린 객체 저장
-        r = sr.Recognizer()
-        mt = clock.tick(60) / 1000
-        # 각 loop를 도는 시간. clock.tick()은 밀리초를 반환하므로
-        # 1000을 나누어줘서 초단위로 변경한다.
-        #data = np.frombuffer(stream.read(CHUNK), dtype=np.int16)
+        Thread(target=keyint, daemon=False)
         
-        #for i in vToText:
-        # int(np.average(np.abs(data)))
-        with sr.AudioFile('test.wav') as source:
-            audio = r.record(source, duration=120)
+        if count == 5:
+            break
+        
+        player = AnimatedSprite(count=(count))
+        setcount = 0
+        sentence = '으'
+        playing_count =0
+        
+        running = True
+        while running:
+            # 스크린 객체 저장
+            r = sr.Recognizer()
+            mt = clock.tick(60) / 1000
+            # 각 loop를 도는 시간. clock.tick()은 밀리초를 반환하므로
+            # 1000을 나누어줘서 초단위로 변경한다.
+            #data = np.frombuffer(stream.read(CHUNK), dtype=np.int16)
             
-        noise = r.recognize_google(audio_data=audio, language='ko-KR')
-        hello = KoreanToRoman(unravel = False)
-        output = []
-        p = re.compile('[a-zA-Z]')
-        output.clear()
-        words = sentence.split(' ')
-        for word in words:
-            output.append(hello.transcribe(word,separator= False,capital = False,transliterate = False))
+            #for i in vToText:
+            # int(np.average(np.abs(data)))
+            with sr.AudioFile('test.wav') as source:
+                audio = r.record(source, duration=120)
+            
+            noise = r.recognize_google(audio_data=audio, language='ko-KR')
+            hello = KoreanToRoman(unravel = False)
+            output = []
+            p = re.compile('[a-zA-Z]')
+            output.clear()
+            
+            words = sentence.split(' ')
+            words2 = noise.split(' ')
+            
+            if speech_count == 1 and text_count == 0:
+                for word in words2:
+                    output.append(hello.transcribe(word,separator= False,capital = False,transliterate = False))
+            
+            elif speech_count == 0 and text_count == 1:    
+                for word in words:
+                    output.append(hello.transcribe(word,separator= False,capital = False,transliterate = False))
        
-        jamo_str = ''.join(output)
-        
-        print(jamo_str)
-        for  i in jamo_str:
-            time.sleep(0.1)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
+            jamo_str = ''.join(output)
+            print(jamo_str);
+            for  i in jamo_str:
+                time.sleep(0.1)
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        quit()
                    
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    pygame.mouse.get_rel()         
-                    mouse_pos = pygame.mouse.get_pos()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        pygame.mouse.get_rel()         
+                        mouse_pos = pygame.mouse.get_pos()
                 
-                    if mouse_pos[0] > pygame.Rect((100,100),(100,100)).left and mouse_pos[0] < pygame.Rect((100,100),(100,100)).right and mouse_pos[1] > pygame.Rect((100,100),(100,100)).top and mouse_pos[1] < pygame.Rect((100,100),(100,100)).bottom:
-                        setcount = 1
-                        pygame.mouse.set_cursor(*pygame.cursors.broken_x)   
-                        
-                if event.type == pygame.MOUSEBUTTONUP:
-                    setcount = 0
-                    pygame.mouse.set_cursor(*pygame.cursors.arrow)
- 
-                if setcount == 1:
-                    running = False    
+                        if mouse_pos[0] > pygame.Rect((100,100),(100,100)).left and mouse_pos[0] < pygame.Rect((100,100),(100,100)).right and mouse_pos[1] > pygame.Rect((100,100),(100,100)).top and mouse_pos[1] < pygame.Rect((100,100),(100,100)).bottom:
+                            setcount = 1
+                            pygame.mouse.set_cursor(*pygame.cursors.broken_x)   
                     
-                   
-            player.update(mt,i,count)
-            setcount = player.draw()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        pygame.mouse.get_rel()         
+                        mouse_pos = pygame.mouse.get_pos()
+                
+                        if mouse_pos[0] > pygame.Rect((200,100),(100,100)).left and mouse_pos[0] < pygame.Rect((200,100),(100,100)).right and mouse_pos[1] > pygame.Rect((200,100),(100,100)).top and mouse_pos[1] < pygame.Rect((200,100),(100,100)).bottom:
+                            speech_count = 0
+                            text_count = 1
+                            pygame.mouse.set_cursor(*pygame.cursors.broken_x)
+                            sentence = input()
+                            socket_response(sentence)   
+                                
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        pygame.mouse.get_rel()         
+                        mouse_pos = pygame.mouse.get_pos()
+                
+                        if mouse_pos[0] > pygame.Rect((300,100),(100,100)).left and mouse_pos[0] < pygame.Rect((300,100),(100,100)).right and mouse_pos[1] > pygame.Rect((300,100),(100,100)).top and mouse_pos[1] < pygame.Rect((300,100),(100,100)).bottom:
+                            speech_count = 1
+                            text_count = 0
+                            pygame.mouse.set_cursor(*pygame.cursors.broken_x)
+                            
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        setcount = 0
+                        pygame.mouse.set_cursor(*pygame.cursors.arrow)
+ 
+                    if setcount == 1:
+                        running = False    
+            
+                player.update(mt,i,count)
+                setcount = player.draw() 
+                
+         
             
         
  
