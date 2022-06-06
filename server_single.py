@@ -12,8 +12,7 @@ def binder(client_socket, addr):
         while True:
             # socket의 recv함수는 연결된 소켓으로부터 데이터를 받을 대기하는 함수이다.
             # 최소 4바이트를 대기시킨다
-            data = client_socket.recv(4);
-            
+            data = client_socket.recv(1024);
             # 최소 4바이트는 전송할 데이터의 크기
             # 그 크기는 little 엔디언으로 byte에서 int형식으로 변환
             length = int.from_bytes(data, "little");
