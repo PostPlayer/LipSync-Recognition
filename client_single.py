@@ -21,7 +21,7 @@ def socket_response(msg):
     client_socket.sendall(length.to_bytes(4, byteorder="little"));
     # 데이터 전송
     client_socket.sendall(data);
-    
+
     # server로부터 전송받을 데이터 길이를 받는다
     data = client_socket.recv(1024);
     # 데이터 길이는 little 엔디언 형식으로 int를 변환
@@ -32,5 +32,6 @@ def socket_response(msg):
     msg = data.decode();
     # 데이터를 출력
     print('Received from : ', msg);
-    
+
     client_socket.close();
+    return msg
