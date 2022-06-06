@@ -262,7 +262,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         player.append(pygame.image.load("state/catFace_Mute.png"))
         player.append(pygame.image.load("state/cowFace_Mute.png"))
         player.append(pygame.image.load("state/mouseFace_Mute.png"))
-        player.append(pygame.image.load("state/logout.png"))
+        player.append(pygame.image.load("state/logout2.png"))
         player[0] = pygame.transform.scale(player[0], (100, 100))
         player[1] = pygame.transform.scale(player[1],(100,100))
         player[2] = pygame.transform.scale(player[2],(100,100))

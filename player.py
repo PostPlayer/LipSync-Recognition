@@ -27,3 +27,7 @@ def Playing():
     stream.close()
 
     p.terminate()
+    exit()
+    
+if __name__ == '__main__':
+   Playing()
