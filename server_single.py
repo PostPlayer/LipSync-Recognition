@@ -1,5 +1,7 @@
 import socket, threading
 
+PORT = 10901
+
 # binder 함수는 서버에서 accept가 되면, 생성되는 socket 인스턴스를 통해 client로부터 데이터
 # 를 받으면 echo 형태로 재송신하는 메소드이다.
 def binder(client_socket, addr):
@@ -11,7 +13,7 @@ def binder(client_socket, addr):
         # 만약 접속이 끊기게 된다면, except가 발생해서 접속이 끊기게 된다
         while True:
             # socket의 recv함수는 연결된 소켓으로부터 데이터를 받을 대기하는 함수이다.
-            data = client_socket.recv(4);
+            data = client_socket.recv(1024);
             # 최소 4바이트는 전송할 데이터의 크기
             # 그 크기는 little 엔디언으로 byte에서 int형식으로 변환
             length = int.from_bytes(data, "little");
@@ -52,7 +54,7 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1);
 # 서버는 복수 ip를 사용하는 pc의 경우, ip를 지정하고, 그렇지 않으면 None이 아닌 ''로 설정
 # 포트는 pc내에서 비어있는 포트를 사용, cmd에서 netstat -an | find "LISTEN"으로 확인할 수 있음
-server_socket.bind(('', 9999));
+server_socket.bind(('', PORT));
 # server 설정이 완료되면, listen을 시작한다
 server_socket.listen();
 

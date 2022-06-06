@@ -16,6 +16,7 @@ from jamo import h2j, j2hcj
 from trance import KoreanToRoman,arg_parse
 import re
 from player import Playing
+from client_single import socket_response
 # 스크린 전체 크기 지정
 
 SCREEN_WIDTH = 1020
@@ -95,7 +96,8 @@ class AnimatedSprite(pygame.sprite.Sprite):
         images4.append(pygame.image.load('state/mouseFace_I.png'))
         images4.append(pygame.image.load('state/mouseFace_O.png'))
         images4.append(pygame.image.load('state/mouseFace_U.png'))
-        
+        images5 = []
+        images5.append(pygame.image.load('state/logout.png'))
         image_nomal = []
         
         if count == 1:
@@ -108,7 +110,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
             image_nomal = images4     
         # rect 만들기
         self.exit_rect = pygame.Rect((100,100),size)
-        self.rab_rect = pygame.Rect((200,200), size)
+        self.rab_rect = pygame.Rect((200,200),size)
         self.cat_rect = pygame.Rect((400,200),size)
         self.cow_rect = pygame.Rect((600,200),size)
         self.rat_rect = pygame.Rect((800,200),size)
@@ -118,7 +120,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.images2 =[pygame.transform.scale(image2,size) for image2 in images2]
         self.images3 =[pygame.transform.scale(image3,size) for image3 in images3]
         self.images4 =[pygame.transform.scale(image4,size) for image4 in images4]
-
+        self.images5 = [pygame.transform.scale(image5,size) for image5 in images5]
         # 캐릭터의 첫번째 이미지
         self.index1 = 0
         self.index2 = 0
@@ -129,6 +131,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.image2 = images2[self.index2]
         self.image3 = images3[self.index3]
         self.image4 = images4[self.index4]
+        self.image5 = images5[0]
         
         # 1초에 보여줄 1장의 이미지 시간을 계산, 소수점 3자리까지 반올림
         self.animation_time = round(100 / len(self.image_nomal * 100), 2)
@@ -145,7 +148,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         SCREEN.blit(self.image2,self.cat_rect)
         SCREEN.blit(self.image3,self.cow_rect)
         SCREEN.blit(self.image4,self.rat_rect)
-        SCREEN.blit(self.image1, self.exit_rect)
+        SCREEN.blit(self.image5, self.exit_rect)
         pygame.display.flip()                           
                 
                       
@@ -326,13 +329,14 @@ class AnimatedSprite(pygame.sprite.Sprite):
         text_rect.midtop = (x, y)
         SCREEN.blit(text_surface, text_rect)
         
-        
-    def check_self(self):
-        self.exit_rect
     
 
 def main():
-    
+    pygame.init()
+    SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("음성인식 테스트")
+    # FPS를 위한 Clock 생성
+    clock = pygame.time.Clock()
     #Rcoding()
     count = 1
     # player 생성
@@ -345,7 +349,8 @@ def main():
     
     player = AnimatedSprite(count=(count))
     setcount = 0
-    
+    sentence = input()
+    socket_response(sentence)
     running = True
     while running:
 # 스크린 객체 저장
@@ -359,13 +364,13 @@ def main():
         # int(np.average(np.abs(data)))
         with sr.AudioFile('test.wav') as source:
             audio = r.record(source, duration=120)
-        
+            
         noise = r.recognize_google(audio_data=audio, language='ko-KR')
         hello = KoreanToRoman(unravel = False)
         output = []
         p = re.compile('[a-zA-Z]')
         output.clear()
-        words = noise.split(' ')
+        words = sentence.split(' ')
         for word in words:
             output.append(hello.transcribe(word,separator= False,capital = False,transliterate = False))
        
@@ -378,7 +383,7 @@ def main():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
-                    
+                   
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pygame.mouse.get_rel()         
                     mouse_pos = pygame.mouse.get_pos()
@@ -394,10 +399,9 @@ def main():
                 if setcount == 1:
                     running = False    
                     
-                    
+                   
             player.update(mt,i,count)
             setcount = player.draw()
-            
             
         
  
