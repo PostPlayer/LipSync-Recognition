@@ -30,7 +30,7 @@ while j < count:
         
     
 print("Recording is finished.")
-#print(frames)
+##print(frames)
 stream.stop_stream()
 stream.close()
 p.terminate()
