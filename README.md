@@ -47,7 +47,7 @@ Refer to the Google Style Guide.
 
 링크는 다음과 같이 작성할 수 있습니다.
 
-[블로그 주소](https://blog.naver.com/ndb796)
+[작업 노션 주소](https://www.notion.so/80000coding/d9a17941d33849049d587d60e2675df7)
 
 순서 없는 목록은 다음과 같이 작성할 수 있습니다.
 
