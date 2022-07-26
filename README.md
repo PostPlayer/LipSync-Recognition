@@ -1,15 +1,17 @@
-# Webserv
-이름|아이디|이미지|역할
-----|----|----|----|
-신수형||||
-박인수||||
-김형준||||
-홍서경||||
+# LipSync-Recognition
+
+YU Graduate Project [suhshin, PostPlayer, emptyhead, @홍서경]
+
+| suhshin                             | PostPlayer                               | emptyhead                                |
+| -------------------------------- | ------------------------------------ | -------------------------------------- |
+| @rkskekzzz                           | @INSU                             | @hyung6370                             |
+| ![suhshinprofile](./asset/suhshin.png) | ![postplayerprofile](./asset/postplayer.jpeg) | ![emptyheadprofile](./asset/emptyhead.jpeg) |
+
 
 # Introdution
 server spec
 
-## Description
+## Description 
 프로젝트에 대한 간단한 설명을 기술한다. 어떠한 일을 수행하기 위한 프로젝트인지, 어떠한 서비스를 위한 것인지를 작성하면 된다. 너무 길게 작성하기 보단 간결하고 명료하게 작성하는 것이 좋다. 프로젝트의 가치를 전달하는 것도 좋다.
 
 * 깃 튜토리얼
