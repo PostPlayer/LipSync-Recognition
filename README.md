@@ -5,7 +5,7 @@ YU Graduate Project [suhshin, PostPlayer, emptyhead, @홍서경]
 | suhshin                             | PostPlayer                               | emptyhead                                |
 | -------------------------------- | ------------------------------------ | -------------------------------------- |
 | @rkskekzzz                           | @INSU                             | @hyung6370                             |
-| ![suhshinprofile](./asset/suhshin.png) | ![postplayerprofile](./asset/postplayer.jpeg) | ![emptyheadprofile](./asset/abc.jpeg) |
+| ![suhshinprofile](./asset/suhshin.png) | ![postplayerprofile](./asset/postplayer.jpeg) | ![emptyheadprofile](./asset/emptyhead.jpeg) |
 
 
 # Introdution
