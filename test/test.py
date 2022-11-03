@@ -6,7 +6,7 @@ import pyaudio
 import wave
 import numpy as np
 from pynput import keyboard
-from threading import Thread
+from threading import  Thread
 import cv2
 from matplotlib import pyplot as plt
 from IPython import display 
@@ -357,7 +357,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
     
 
 def main():
-
+    
     speech_count = 1
     text_count = 0
     
@@ -385,7 +385,7 @@ def main():
         setcount = 0
         sentence = '으'
         playing_count =0
-        
+       
         running = True
         while running:
             # 스크린 객체 저장
@@ -396,7 +396,7 @@ def main():
             #data = np.frombuffer(stream.read(CHUNK), dtype=np.int16)
             
             #for i in vToText:
-            # int(np.average(np.abs(data)))
+                #int(np.average(np.abs(data)))
             with sr.AudioFile('test.wav') as source:
                 audio = r.record(source, duration=120)
             
