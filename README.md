@@ -16,6 +16,14 @@ Realtime lipsync API that utilizes E2E speech recognition engine. This repositor
 ## Description 
 
 이 프로젝트는 딥러닝으로 학습된 모델을 통해 실제 사용자가 말하는 음성을 실시간으로 받아들여, 사용자의 캐릭터가 사람이 직접 앞에서 말하는 듯한 효과를  줄 수 있는 서비스이다. 이 프로젝트는 다양한 서비스에서 모두 사용할 수 있는 API로 제작 될 것이다.
+<br><br>
+# Outline
+![title](./asset/outline.png)<br><br>
+
+# Engine Principle
+![title](./asset/principle1.png)<br>
+![title](./asset/principle2.png)<br><br><br>
+
 
 # Engine Function
 ### TTI (Text To Image)
@@ -29,4 +37,29 @@ Realtime lipsync API that utilizes E2E speech recognition engine. This repositor
 * 음성 입력을 받아서 텍스트로 출력한다
 ### RNN-T Korean
 * 한국어로 번역해주는 기능 
+<br><br><br>
+# Project Process
+
+## Data preprocessing
+![title](./asset/preprocessing.png)<br><br>
+
+## Learning model
+![title](./asset/learning.png)<br><br>
+
+# Development environment
+## Frontend
+- ___Python___
+## Backend
+- ___Flask framework___
+<br><br>
+
+## Server
+![title](./asset/server.png)<br>
+
+<br>
+
+# Project Result
+## Model
+![title](./asset/result1.png)<br><br>
+![title](./asset/result2.png)<br>
 

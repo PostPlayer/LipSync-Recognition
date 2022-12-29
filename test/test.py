@@ -358,8 +358,8 @@ class AnimatedSprite(pygame.sprite.Sprite):
 
 def main():
     
-    speech_count = 1
-    text_count = 0
+    speech_count = 0
+    text_count = 1
     
     testing = True
     while testing:
@@ -383,7 +383,7 @@ def main():
         
         player = AnimatedSprite(count=(count))
         setcount = 0
-        sentence = '으'
+        sentence = 'ㅇ'
         playing_count =0
        
         running = True
@@ -397,17 +397,21 @@ def main():
             
             #for i in vToText:
                 #int(np.average(np.abs(data)))
-            with sr.AudioFile('test.wav') as source:
-                audio = r.record(source, duration=120)
+            if speech_count == 1 and text_count == 0: 
+                with sr.AudioFile('test.wav') as source:
+                    audio = r.record(source, duration=120)
             
-            noise = r.recognize_google(audio_data=audio, language='ko-KR')
+                noise = r.recognize_google(audio_data=audio, language='ko-KR')
+                words2 = noise.split(' ')
+                
             hello = KoreanToRoman(unravel = False)
+           
             output = []
             p = re.compile('[a-zA-Z]')
             output.clear()
             
             words = sentence.split(' ')
-            words2 = noise.split(' ')
+            
             
             if speech_count == 1 and text_count == 0:
                 for word in words2:
@@ -418,9 +422,10 @@ def main():
                     output.append(hello.transcribe(word,separator= False,capital = False,transliterate = False))
        
             jamo_str = ''.join(output)
-            print(jamo_str);
+            if jamo_str != 'ㅇ':
+                print(jamo_str)
             for  i in jamo_str:
-                time.sleep(0.1)
+                time.sleep(1)
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         pygame.quit()

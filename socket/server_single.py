@@ -16,11 +16,10 @@ def binder(client_socket, addr):
             data = client_socket.recv(1024);
             # 최소 4바이트는 전송할 데이터의 크기
             # 그 크기는 little 엔디언으로 byte에서 int형식으로 변환
-            length = int.from_bytes(data, "little");
+            # length = int.from_bytes(data, "little");
             
             # 다시 데이터를 수신
-            data = client_socket.recv(length);
-            
+            # data = client_socket.recv(length);
             # 수신된 데이터를 str형식으로 decode한다
             msg = data.decode();
             
@@ -41,9 +40,9 @@ def binder(client_socket, addr):
             
             # 데이터를 클라이언트로 전송
             client_socket.sendall(data);
-    except:
+    except Exception as e:
         # 접속이 끊기면, except가 발생
-        print("except : ", addr);
+        print("except : ", e);
     finally:
         # 접속이 끊기면, socket 리소스를 닫는다
         client_socket.close();

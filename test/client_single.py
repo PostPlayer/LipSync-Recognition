@@ -17,8 +17,8 @@ def socket_response(msg):
     data = msg.encode();
     # 메시지 길이를 구한다
     length = len(data);
-    # server로 little 형식으로 데이터 길이를 전송한다s
-    client_socket.sendall(length.to_bytes(4, byteorder="little"));
+    # server로 little 형식으로 데이터 길이를 전송한다
+    # client_socket.sendall(length.to_bytes(2, byteorder="little"))
     # 데이터 전송
     client_socket.sendall(data);
     

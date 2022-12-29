@@ -50,6 +50,7 @@ def recv_func():
             pass
 
 client_sock=socket(AF_INET, SOCK_STREAM)
+
 try:
     client_sock.connect((Host,Port))
 
